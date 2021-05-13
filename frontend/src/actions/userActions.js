@@ -26,8 +26,6 @@ import {
   USER_UPDATE_FAIL,
 } from "../constants/userConstants";
 
-import { MY_ORDER_DETAILS_RESET } from "../constants/orderConstants";
-
 export const loginUser = (email, password) => async (dispatch, getState) => {
   try {
     dispatch({
@@ -61,16 +59,11 @@ export const loginUser = (email, password) => async (dispatch, getState) => {
 
 export const logoutUser = () => async (dispatch, getState) => {
   localStorage.removeItem("userInfo");
-  localStorage.removeItem("shippingAddress");
-  localStorage.removeItem("cartItems");
   dispatch({
     type: USER_LOGOUT,
   });
   dispatch({
     type: USER_DETAILS_RESET,
-  });
-  dispatch({
-    type: MY_ORDER_DETAILS_RESET,
   });
   dispatch({
     type: USER_LIST_RESET,

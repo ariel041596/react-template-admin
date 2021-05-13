@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import UserListScreen from "./screens/UserListScreen";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/" component={HomeScreen} exact></Route>
         <Route path="/login" component={LoginScreen}></Route>
         <Route path="/register" component={RegisterScreen}></Route>
+        <Route path="/admin/users" component={UserListScreen}></Route>
       </Layout>
     </Router>
   );

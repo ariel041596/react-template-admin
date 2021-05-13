@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,21 +8,25 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
-import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import MailIcon from "@material-ui/icons/Mail";
+import MenuIcon from "@material-ui/icons/Menu";
+import GroupIcon from "@material-ui/icons/Group";
 import PersonIcon from "@material-ui/icons/Person";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 import { Link } from "react-router-dom";
+
+import { logoutUser } from "../actions/userActions";
 
 const drawerWidth = 240;
 
@@ -81,14 +85,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Layout({ children, ...props }) {
+  // Variables
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const dispatch = useDispatch();
 
+  // State
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  // Methods
+  const logoutHandler = () => {
+    dispatch(logoutUser());
+  };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -100,9 +111,14 @@ function Layout({ children, ...props }) {
       icon: <MailIcon></MailIcon>,
     },
     {
-      to: "/login",
-      text: "Login",
-      icon: <InboxIcon></InboxIcon>,
+      to: "/admin/users",
+      text: "Users",
+      icon: <GroupIcon></GroupIcon>,
+    },
+    {
+      to: "/profile",
+      text: "Profile",
+      icon: <AccountCircleIcon></AccountCircleIcon>,
     },
   ];
 
@@ -150,14 +166,24 @@ function Layout({ children, ...props }) {
             Responsive drawer
           </Typography>
           <div className={classes.grow} />
-          <Button
-            component={Link}
-            to="/login"
-            color="inherit"
-            startIcon={<PersonIcon />}
-          >
-            Sign in
-          </Button>
+          {!userInfo ? (
+            <Button
+              component={Link}
+              to="/login"
+              color="inherit"
+              startIcon={<PersonIcon />}
+            >
+              Sign in
+            </Button>
+          ) : (
+            <Button
+              onClick={logoutHandler}
+              color="inherit"
+              startIcon={<PowerSettingsNewIcon />}
+            >
+              Sign Out
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       {userInfo && (

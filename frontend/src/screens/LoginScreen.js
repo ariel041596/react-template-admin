@@ -14,6 +14,13 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 
+import Meta from "../components/Meta";
+
+import Loading from "../components/Loading";
+import Message from "../components/Message";
+
+import { loginUser } from "../actions/userActions";
+
 const useStyles = makeStyles({
   root: {
     maxWidth: 400,
@@ -72,10 +79,7 @@ const LoginScreen = ({ location, history }) => {
   // Methods
   const loginHandler = (e) => {
     e.preventDefault();
-    console.log({
-      email: email,
-      password: password,
-    });
+    dispatch(loginUser(email, password));
   };
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -85,87 +89,95 @@ const LoginScreen = ({ location, history }) => {
   };
 
   return (
-    <form onSubmit={loginHandler} className={classes.root}>
-      <div className={classes.field}>
-        <Avatar className={classes.avatar}>
-          <MailIcon></MailIcon>
-        </Avatar>
-        <Typography className={classes.title} variant="h4">
-          Login
-        </Typography>
-      </div>
-      <div>
-        <TextField
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-          type="email"
-          required
-          fullWidth
-          id="outlined-email"
-          variant="outlined"
-          label="Email"
-          color="primary"
-          InputProps={{
-            startadornment: (
-              <InputAdornment position="end">
-                <IconButton aria-label="toggle email visibility" edge="end">
-                  <MailIcon></MailIcon>
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
-      </div>
-      <div>
-        <TextField
-          margin="normal"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          type={values.showPassword ? "text" : "password"}
-          required
-          fullWidth
-          id="outlined-password"
-          variant="outlined"
-          color="primary"
-          label="Password"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
-      </div>
-      <div>
-        <Button
-          type="submit"
-          size="large"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className={classes.login}
-        >
-          Sign In
-        </Button>
-        <p>
-          No account yet?{" "}
-          <Link
-            variant="primary"
-            to={redirect ? `/register?redirect=${redirect}` : "/register"}
+    <>
+      <Meta title="React Template | Login"></Meta>
+      <form onSubmit={loginHandler} className={classes.root}>
+        <div className={classes.field}>
+          <Avatar className={classes.avatar}>
+            <MailIcon></MailIcon>
+          </Avatar>
+          <Typography className={classes.title} variant="h4">
+            Login
+          </Typography>
+        </div>
+        <div>
+          <TextField
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            type="email"
+            required
+            fullWidth
+            id="outlined-email"
+            variant="outlined"
+            label="Email"
+            color="primary"
+            InputProps={{
+              startadornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="toggle email visibility" edge="end">
+                    <MailIcon></MailIcon>
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          ></TextField>
+        </div>
+        <div>
+          <TextField
+            margin="normal"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type={values.showPassword ? "text" : "password"}
+            required
+            fullWidth
+            id="outlined-password"
+            variant="outlined"
+            color="primary"
+            label="Password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          ></TextField>
+        </div>
+        <div>
+          <Button
+            type="submit"
+            size="large"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.login}
+            disabled={loading}
           >
-            Register
-          </Link>
-        </p>
-      </div>
-    </form>
+            Sign In
+          </Button>
+          <p>
+            Don't have an account?{" "}
+            <Link
+              variant="primary"
+              to={redirect ? `/register?redirect=${redirect}` : "/register"}
+            >
+              Register
+            </Link>
+          </p>
+        </div>
+        <div>
+          {error && <Message severity="error">{error}</Message>}
+          {loading && <Loading></Loading>}
+        </div>
+      </form>
+    </>
   );
 };
 
