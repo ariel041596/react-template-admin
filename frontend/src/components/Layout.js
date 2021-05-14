@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Layout({ children, ...props }) {
+function Layout({ location, history, children, ...props }) {
   // Variables
   const { window } = props;
   const classes = useStyles();
@@ -121,19 +121,54 @@ function Layout({ children, ...props }) {
       icon: <AccountCircleIcon></AccountCircleIcon>,
     },
   ];
+  const routesNotAdmin = [
+    {
+      to: "/",
+      text: "Home",
+      icon: <MailIcon></MailIcon>,
+    },
+    {
+      to: "/profile",
+      text: "Profile",
+      icon: <AccountCircleIcon></AccountCircleIcon>,
+    },
+  ];
 
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
-      <List>
-        {routes.map((route, index) => (
-          <ListItem button key={route.to} component={Link} to={route.to}>
-            <ListItemIcon>{route.icon}</ListItemIcon>
-            <ListItemText primary={route.text} />
+      {!userInfo || !userInfo.isAdmin ? (
+        <List>
+          {routesNotAdmin.map((route, index) => (
+            <ListItem button key={route.to} component={Link} to={route.to}>
+              <ListItemIcon>{route.icon}</ListItemIcon>
+              <ListItemText primary={route.text} />
+            </ListItem>
+          ))}
+          <ListItem button onClick={logoutHandler}>
+            <ListItemIcon>
+              <PowerSettingsNewIcon></PowerSettingsNewIcon>
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
           </ListItem>
-        ))}
-      </List>
+        </List>
+      ) : (
+        <List>
+          {routes.map((route, index) => (
+            <ListItem button key={route.to} component={Link} to={route.to}>
+              <ListItemIcon>{route.icon}</ListItemIcon>
+              <ListItemText primary={route.text} />
+            </ListItem>
+          ))}
+          <ListItem button onClick={logoutHandler}>
+            <ListItemIcon>
+              <PowerSettingsNewIcon></PowerSettingsNewIcon>
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        </List>
+      )}
     </div>
   );
 
@@ -166,7 +201,7 @@ function Layout({ children, ...props }) {
             Responsive drawer
           </Typography>
           <div className={classes.grow} />
-          {!userInfo ? (
+          {!userInfo && (
             <Button
               component={Link}
               to="/login"
@@ -174,14 +209,6 @@ function Layout({ children, ...props }) {
               startIcon={<PersonIcon />}
             >
               Sign in
-            </Button>
-          ) : (
-            <Button
-              onClick={logoutHandler}
-              color="inherit"
-              startIcon={<PowerSettingsNewIcon />}
-            >
-              Sign Out
             </Button>
           )}
         </Toolbar>
