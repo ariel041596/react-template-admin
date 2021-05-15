@@ -24,6 +24,9 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
+  USER_ADD_REQUEST,
+  USER_ADD_SUCCESS,
+  USER_ADD_FAIL,
 } from "../constants/userConstants";
 
 export const loginUser = (email, password) => async (dispatch, getState) => {
@@ -284,3 +287,38 @@ export const updateUser = (user) => async (dispatch, getState) => {
     });
   }
 };
+
+export const addUser =
+  (name, email, password, isAdmin) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: USER_ADD_REQUEST,
+      });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "/api/users/adduser",
+        { name, email, password, isAdmin },
+        config
+      );
+      dispatch({
+        type: USER_ADD_SUCCESS,
+        payload: data,
+      });
+    } catch (err) {
+      dispatch({
+        type: USER_ADD_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
+      });
+    }
+  };

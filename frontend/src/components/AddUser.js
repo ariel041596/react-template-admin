@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -11,6 +11,8 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import EmailIcon from "@material-ui/icons/Email";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 import {
   InputAdornment,
@@ -20,8 +22,12 @@ import {
   Checkbox,
 } from "@material-ui/core";
 
-import { updateUser } from "../actions/userActions";
 import Loading from "./Loading";
+import Message from "./Message";
+
+import { USER_ADD_RESET } from "../constants/userConstants";
+
+import { addUser } from "../actions/userActions";
 
 const styles = (theme) => ({
   root: {
@@ -68,32 +74,48 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-const EditUser = ({ ...props }) => {
+const AddUser = ({ ...props }) => {
   // Variables
-  const [name, setName] = useState(props.user.name);
-  const [email, setEmail] = useState(props.user.email);
-  const [isAdmin, setIsAdmin] = useState(props.user.isAdmin);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
 
   // State
 
-  const userUpdate = useSelector((state) => state.userUpdate);
-  const { loading } = userUpdate;
+  const userAdd = useSelector((state) => state.userAdd);
+  const { loading, error, success } = userAdd;
 
   // Methods
-  const editUserHandler = async (e) => {
+  const addUserHandler = async (e) => {
     e.preventDefault();
-    await dispatch(
-      updateUser({
-        _id: props.user._id,
-        name,
-        email,
-        isAdmin: isAdmin,
-      })
-    );
-    props.handleClose();
+    setMessage(null);
+    dispatch({
+      type: USER_ADD_RESET,
+    });
+    const pass = password;
+    const reg = new RegExp("^(?=.*[a-z])(?=.{6,})");
+    const testPass = reg.test(pass);
+    if (!testPass) {
+      setMessage("Password must contain 6 characters");
+    } else {
+      await dispatch(addUser(name, email, password, isAdmin));
+    }
   };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  useEffect(() => {
+    dispatch({
+      type: USER_ADD_RESET,
+    });
+  }, [dispatch]);
 
   return (
     <div>
@@ -105,19 +127,24 @@ const EditUser = ({ ...props }) => {
         open={props.open}
       >
         <DialogTitle id="customized-dialog-title" onClose={props.handleClose}>
-          Edit User
+          Add User
         </DialogTitle>
         <DialogContent dividers>
-          <form onSubmit={editUserHandler} autoComplete="off">
+          {error && <Message severity="error">{error}</Message>}
+          {message && <Message severity="error">{message}</Message>}
+          {success && (
+            <Message severity="success">Successfully added user</Message>
+          )}
+          <form onSubmit={addUserHandler} autoComplete="off">
             <TextField
               onChange={(e) => setName(e.target.value)}
               value={name}
               margin="normal"
               id="input-with-icon-name"
               placeholder="Name"
-              variant="outlined"
               fullWidth
               required
+              variant="outlined"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -131,10 +158,10 @@ const EditUser = ({ ...props }) => {
               value={email}
               margin="normal"
               type="email"
-              variant="outlined"
               required
+              variant="outlined"
               id="input-with-icon-email"
-              placeholder="Name"
+              placeholder="Email"
               fullWidth
               InputProps={{
                 startAdornment: (
@@ -144,6 +171,31 @@ const EditUser = ({ ...props }) => {
                 ),
               }}
             />
+            <TextField
+              margin="normal"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              type={showPassword ? "text" : "password"}
+              required
+              fullWidth
+              id="outlined-password"
+              variant="outlined"
+              color="primary"
+              label="Password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            ></TextField>
             <FormControlLabel
               control={
                 <Checkbox
@@ -165,7 +217,7 @@ const EditUser = ({ ...props }) => {
                   autoFocus
                   color="primary"
                 >
-                  Save changes
+                  Add User
                 </Button>
               )}
             </div>
@@ -176,4 +228,4 @@ const EditUser = ({ ...props }) => {
   );
 };
 
-export default EditUser;
+export default AddUser;

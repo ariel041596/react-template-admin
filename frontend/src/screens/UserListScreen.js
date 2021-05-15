@@ -29,6 +29,8 @@ import Message from "../components/Message";
 import EditUser from "../components/EditUser";
 
 import { getUserList, deleteUser } from "../actions/userActions";
+import AddUser from "../components/AddUser";
+import DeleteModal from "../components/DeleteModal";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -51,7 +53,11 @@ const UserListScreen = ({ history }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [userData, setUserData] = useState("");
+  const [title, setTitle] = useState("");
+  const [messageContent, setMessageContent] = useState("");
 
   // State
   const userList = useSelector((state) => state.userList);
@@ -64,7 +70,10 @@ const UserListScreen = ({ history }) => {
   const { success: successDelete } = userDelete;
 
   const userUpdate = useSelector((state) => state.userUpdate);
-  const { success: userUpdateSuccess } = userUpdate;
+  const { success: userUpdateSuccess, error: userUpdateError } = userUpdate;
+
+  const userAdd = useSelector((state) => state.userAdd);
+  const { success: userAddSuccess } = userAdd;
 
   // useEffect
   useEffect(() => {
@@ -74,25 +83,54 @@ const UserListScreen = ({ history }) => {
       history.push("/login");
     }
     // eslint-disable-next-line
-  }, [dispatch, history, successDelete, userInfo, userUpdateSuccess]);
+  }, [
+    dispatch,
+    history,
+    successDelete,
+    userInfo,
+    userUpdateSuccess,
+    userAddSuccess,
+  ]);
 
   //   Methods
   const handleEditUser = (user) => {
     setOpen(true);
     setUserData(user);
   };
+  const handleAddUser = (user) => {
+    setOpenAdd(true);
+  };
+  const handleDeleteUser = (user) => {
+    setOpenDelete(true);
+    setTitle("Delete User");
+    setUserData(user._id);
+    setMessageContent(`Are you sure want to delete ${user.name}`);
+  };
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleCloseAdd = () => {
+    setOpenAdd(false);
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   return (
     <>
-      {error ? (
+      {userUpdateError ? (
+        <Message severity="error">{userUpdateError}</Message>
+      ) : error ? (
         <Message severity="error">{error}</Message>
       ) : (
         <>
           <div className={classes.grow}>
-            <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+            <Button
+              onClick={handleAddUser}
+              color="primary"
+              variant="contained"
+              startIcon={<AddIcon />}
+            >
               Add User
             </Button>
           </div>
@@ -151,7 +189,11 @@ const UserListScreen = ({ history }) => {
                         >
                           <EditIcon />
                         </IconButton>
-                        <IconButton color="secondary" aria-label="delete">
+                        <IconButton
+                          onClick={() => handleDeleteUser(user)}
+                          color="secondary"
+                          aria-label="delete"
+                        >
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>
@@ -161,13 +203,24 @@ const UserListScreen = ({ history }) => {
               )}
             </Table>
           </TableContainer>
-
           {open && (
             <EditUser
               handleClose={handleClose}
               open={open}
               user={userData}
             ></EditUser>
+          )}
+          {openAdd && (
+            <AddUser handleClose={handleCloseAdd} open={openAdd}></AddUser>
+          )}
+          {openDelete && (
+            <DeleteModal
+              user={userData}
+              title={title}
+              messageContent={messageContent}
+              handleClose={handleCloseDelete}
+              open={openDelete}
+            ></DeleteModal>
           )}
         </>
       )}

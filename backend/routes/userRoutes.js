@@ -9,10 +9,13 @@ import {
   deleteUser,
   getUserByID,
   updateUser,
+  addUser,
 } from "../controllers/userController.js";
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
 
+router.post("/adduser", protect, isAdmin, addUser);
 router.post("/login", authUser);
+
 router
   .route("/profile")
   .get(protect, getUserProfile)
