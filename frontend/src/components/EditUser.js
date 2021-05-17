@@ -127,6 +127,7 @@ const EditUser = ({ ...props }) => {
               }}
             />
             <TextField
+              disabled
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               margin="normal"

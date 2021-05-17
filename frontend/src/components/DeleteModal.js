@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -66,14 +66,12 @@ const DeleteModal = ({ ...props }) => {
   const dispatch = useDispatch();
 
   // State
-
   const userDelete = useSelector((state) => state.userDelete);
   const { loading } = userDelete;
 
   // Methods
   const deleteUserHandler = async (e) => {
     e.preventDefault();
-    console.log(props.user);
     await dispatch(deleteUser(props.user));
     props.handleClose();
   };

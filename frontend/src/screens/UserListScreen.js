@@ -14,9 +14,7 @@ import {
   TableBody,
   TableContainer,
   TableCell,
-  Snackbar,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
 
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -28,13 +26,12 @@ import Loading from "../components/Loading";
 import Message from "../components/Message";
 import EditUser from "../components/EditUser";
 
-import { getUserList, deleteUser } from "../actions/userActions";
 import AddUser from "../components/AddUser";
 import DeleteModal from "../components/DeleteModal";
+import OpenSnackBar from "../components/OpenSnackBar";
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import { USER_DELETE_RESET } from "../constants/userConstants";
+import { getUserList } from "../actions/userActions";
 
 const useStyles = makeStyles({
   table: {
@@ -55,8 +52,10 @@ const UserListScreen = ({ history }) => {
   const [open, setOpen] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openSnack, setOpenSnack] = useState(false);
   const [userData, setUserData] = useState("");
   const [title, setTitle] = useState("");
+  const [message, setMessage] = useState(null);
   const [messageContent, setMessageContent] = useState("");
 
   // State
@@ -77,10 +76,21 @@ const UserListScreen = ({ history }) => {
 
   // useEffect
   useEffect(() => {
+    dispatch({
+      type: USER_DELETE_RESET,
+    });
     if (userInfo && userInfo.isAdmin) {
       dispatch(getUserList());
     } else {
       history.push("/login");
+    }
+    if (successDelete) {
+      setOpenSnack(true);
+      setMessage("Sucessfully deleted user!");
+    }
+    if (userUpdateSuccess) {
+      setOpenSnack(true);
+      setMessage("Sucessfully changed user data!");
     }
     // eslint-disable-next-line
   }, [
@@ -124,17 +134,27 @@ const UserListScreen = ({ history }) => {
         <Message severity="error">{error}</Message>
       ) : (
         <>
-          <div className={classes.grow}>
-            <Button
-              onClick={handleAddUser}
-              color="primary"
-              variant="contained"
-              startIcon={<AddIcon />}
-            >
-              Add User
-            </Button>
+          <div>
+            <div className={classes.grow}>
+              <Button
+                onClick={handleAddUser}
+                color="primary"
+                variant="contained"
+                startIcon={<AddIcon />}
+              >
+                Add User
+              </Button>
+            </div>
+            {openSnack && (
+              <OpenSnackBar
+                open={openSnack}
+                message={message}
+                handleOpenSnack={() => {
+                  setOpenSnack(false);
+                }}
+              ></OpenSnackBar>
+            )}
           </div>
-
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
               <TableHead>

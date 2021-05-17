@@ -24,7 +24,7 @@ import GroupIcon from "@material-ui/icons/Group";
 import PersonIcon from "@material-ui/icons/Person";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { logoutUser } from "../actions/userActions";
 
@@ -82,6 +82,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  active: {
+    background: "#f4f4f4",
+  },
 }));
 
 function Layout({ location, history, children, ...props }) {
@@ -89,6 +92,7 @@ function Layout({ location, history, children, ...props }) {
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const locationActive = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const dispatch = useDispatch();
 
@@ -141,7 +145,15 @@ function Layout({ location, history, children, ...props }) {
       {!userInfo || !userInfo.isAdmin ? (
         <List>
           {routesNotAdmin.map((route, index) => (
-            <ListItem button key={route.to} component={Link} to={route.to}>
+            <ListItem
+              className={
+                locationActive.pathname === route.to ? classes.active : null
+              }
+              button
+              key={route.to}
+              component={Link}
+              to={route.to}
+            >
               <ListItemIcon>{route.icon}</ListItemIcon>
               <ListItemText primary={route.text} />
             </ListItem>
@@ -156,7 +168,15 @@ function Layout({ location, history, children, ...props }) {
       ) : (
         <List>
           {routes.map((route, index) => (
-            <ListItem button key={route.to} component={Link} to={route.to}>
+            <ListItem
+              className={
+                locationActive.pathname === route.to ? classes.active : null
+              }
+              button
+              key={route.to}
+              component={Link}
+              to={route.to}
+            >
               <ListItemIcon>{route.icon}</ListItemIcon>
               <ListItemText primary={route.text} />
             </ListItem>
