@@ -6,7 +6,6 @@ import {
   Button,
   IconButton,
   Chip,
-  Avatar,
   Paper,
   TableRow,
   Table,
@@ -19,6 +18,7 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import AddIcon from "@material-ui/icons/Add";
 
 // Components
@@ -30,10 +30,13 @@ import AddUser from "../components/AddUser";
 import DeleteModal from "../components/DeleteModal";
 import OpenSnackBar from "../components/OpenSnackBar";
 
-import { USER_DELETE_RESET } from "../constants/userConstants";
+import {
+  USER_DELETE_RESET,
+  USER_UPDATE_RESET,
+} from "../constants/userConstants";
 import { getUserList } from "../actions/userActions";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
     minHeight: 150,
@@ -43,7 +46,7 @@ const useStyles = makeStyles({
     justifyContent: "flex-end",
     marginBottom: 10,
   },
-});
+}));
 
 const UserListScreen = ({ history }) => {
   // Variables
@@ -78,6 +81,9 @@ const UserListScreen = ({ history }) => {
   useEffect(() => {
     dispatch({
       type: USER_DELETE_RESET,
+    });
+    dispatch({
+      type: USER_UPDATE_RESET,
     });
     if (userInfo && userInfo.isAdmin) {
       dispatch(getUserList());
@@ -176,40 +182,32 @@ const UserListScreen = ({ history }) => {
                       </TableCell>
                       <TableCell align="left">{user.email}</TableCell>
                       <TableCell align="left">
-                        {user.isAdmin ? (
-                          <Chip
-                            size="small"
-                            avatar={
-                              <Avatar>
-                                <VerifiedUserIcon></VerifiedUserIcon>
-                              </Avatar>
-                            }
-                            label="Admin"
-                            color="primary"
-                            variant="outlined"
-                          />
-                        ) : (
-                          <Chip
-                            avatar={
-                              <Avatar>
-                                <AddIcon></AddIcon>
-                              </Avatar>
-                            }
-                            size="small"
-                            label="User"
-                            color="primary"
-                            variant="outlined"
-                          />
-                        )}
+                        <Chip
+                          size="small"
+                          clickable
+                          onDelete={() => {}}
+                          deleteIcon={
+                            user.isAdmin ? (
+                              <VerifiedUserIcon />
+                            ) : (
+                              <AccountCircleIcon />
+                            )
+                          }
+                          label={user.isAdmin ? "Admin" : "User"}
+                          color="primary"
+                          variant="outlined"
+                        />
                       </TableCell>
                       <TableCell align="left">
                         <IconButton
+                          size="small"
                           onClick={() => handleEditUser(user)}
                           aria-label="edit"
                         >
                           <EditIcon />
                         </IconButton>
                         <IconButton
+                          size="small"
                           onClick={() => handleDeleteUser(user)}
                           color="secondary"
                           aria-label="delete"
