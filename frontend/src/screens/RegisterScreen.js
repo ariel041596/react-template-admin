@@ -20,6 +20,7 @@ import Loading from "../components/Loading";
 import Message from "../components/Message";
 
 import { registerUser } from "../actions/userActions";
+import { USER_REGISTER_RESET } from "../constants/userConstants";
 
 const useStyles = makeStyles({
   root: {
@@ -55,7 +56,8 @@ const useStyles = makeStyles({
 const RegisterScreen = ({ location, history }) => {
   // Variables
   const classes = useStyles();
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -83,6 +85,9 @@ const RegisterScreen = ({ location, history }) => {
   // Methods
   const registerHandler = (e) => {
     e.preventDefault();
+    dispatch({
+      type: USER_REGISTER_RESET,
+    });
     setMessage(null);
     setMessageMatch(null);
     const pass = password;
@@ -95,7 +100,7 @@ const RegisterScreen = ({ location, history }) => {
     } else if (password !== confirmPassword) {
       setMessageMatch("Password do not match");
     } else {
-      dispatch(registerUser(name, email, password));
+      dispatch(registerUser(firstName, lastName, email, password));
     }
   };
   const handleClickShowPassword = () => {
@@ -123,14 +128,26 @@ const RegisterScreen = ({ location, history }) => {
         <div>
           <TextField
             margin="normal"
-            onChange={(e) => setName(e.target.value)}
-            value={name}
+            onChange={(e) => setFirstName(e.target.value)}
+            value={firstName}
             type="text"
             required
             fullWidth
-            id="outlined-name"
+            id="outlined-first-name"
             variant="outlined"
-            label="Name"
+            label="First Name"
+            color="primary"
+          ></TextField>
+          <TextField
+            margin="normal"
+            onChange={(e) => setLastName(e.target.value)}
+            value={lastName}
+            type="text"
+            required
+            fullWidth
+            id="outlined-last-name"
+            variant="outlined"
+            label="Last Name"
             color="primary"
           ></TextField>
         </div>

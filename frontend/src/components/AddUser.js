@@ -76,11 +76,13 @@ const DialogContent = withStyles((theme) => ({
 
 const AddUser = ({ ...props }) => {
   // Variables
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [message, setMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -94,6 +96,7 @@ const AddUser = ({ ...props }) => {
   const addUserHandler = async (e) => {
     e.preventDefault();
     setMessage(null);
+    setSuccessMessage(null);
     dispatch({
       type: USER_ADD_RESET,
     });
@@ -103,7 +106,7 @@ const AddUser = ({ ...props }) => {
     if (!testPass) {
       setMessage("Password must contain 6 characters");
     } else {
-      await dispatch(addUser(name, email, password, isAdmin));
+      await dispatch(addUser(firstName, lastName, email, password, isAdmin));
     }
   };
 
@@ -115,7 +118,15 @@ const AddUser = ({ ...props }) => {
     dispatch({
       type: USER_ADD_RESET,
     });
-  }, [dispatch]);
+    if (success) {
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setIsAdmin(false);
+      setSuccessMessage("Successfully added user");
+    }
+  }, [dispatch, success]);
 
   return (
     <div>
@@ -132,16 +143,33 @@ const AddUser = ({ ...props }) => {
         <DialogContent dividers>
           {error && <Message severity="error">{error}</Message>}
           {message && <Message severity="error">{message}</Message>}
-          {success && (
-            <Message severity="success">Successfully added user</Message>
+          {successMessage && (
+            <Message severity="success">{successMessage}</Message>
           )}
           <form onSubmit={addUserHandler} autoComplete="off">
             <TextField
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
               margin="normal"
               id="input-with-icon-name"
-              placeholder="Name"
+              placeholder="First Name"
+              fullWidth
+              required
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountBoxIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+              margin="normal"
+              id="input-with-icon-name"
+              placeholder="Last Name"
               fullWidth
               required
               variant="outlined"

@@ -73,40 +73,41 @@ export const logoutUser = () => async (dispatch, getState) => {
   });
 };
 
-export const registerUser = (name, email, password) => async (dispatch) => {
-  try {
-    dispatch({
-      type: USER_REGISTER_REQUEST,
-    });
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const { data } = await axios.post(
-      "/api/users",
-      { name, email, password },
-      config
-    );
-    dispatch({
-      type: USER_REGISTER_SUCCESS,
-      payload: data,
-    });
-    dispatch({
-      type: USER_LOGIN_SUCCESS,
-      payload: data,
-    });
-    localStorage.setItem("userInfo", JSON.stringify(data));
-  } catch (err) {
-    dispatch({
-      type: USER_REGISTER_FAIL,
-      payload:
-        err.response && err.response.data.message
-          ? err.response.data.message
-          : err.message,
-    });
-  }
-};
+export const registerUser =
+  (firstName, lastName, email, password) => async (dispatch) => {
+    try {
+      dispatch({
+        type: USER_REGISTER_REQUEST,
+      });
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/api/users",
+        { firstName, lastName, email, password },
+        config
+      );
+      dispatch({
+        type: USER_REGISTER_SUCCESS,
+        payload: data,
+      });
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data,
+      });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    } catch (err) {
+      dispatch({
+        type: USER_REGISTER_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
+      });
+    }
+  };
 
 // if you want to get the Token you have to import getState
 export const getUserDetails = (id) => async (dispatch, getState) => {
@@ -289,7 +290,8 @@ export const updateUser = (user) => async (dispatch, getState) => {
 };
 
 export const addUser =
-  (name, email, password, isAdmin) => async (dispatch, getState) => {
+  (firstName, lastName, email, password, isAdmin) =>
+  async (dispatch, getState) => {
     try {
       dispatch({
         type: USER_ADD_REQUEST,
@@ -305,7 +307,7 @@ export const addUser =
       };
       const { data } = await axios.post(
         "/api/users/adduser",
-        { name, email, password, isAdmin },
+        { firstName, lastName, email, password, isAdmin },
         config
       );
       dispatch({

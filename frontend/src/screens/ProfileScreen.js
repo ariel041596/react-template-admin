@@ -11,19 +11,23 @@ import {
   IconButton,
   Breadcrumbs,
   Snackbar,
+  Avatar,
+  Badge,
 } from "@material-ui/core";
 
 import MuiAlert from "@material-ui/lab/Alert";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 // Icons
 import MailIcon from "@material-ui/icons/Mail";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 
 import Loading from "../components/Loading";
 
-import { updateUserProfile } from "../actions/userActions";
+import { updateUserProfile, getUserDetails } from "../actions/userActions";
 
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
 import Message from "../components/Message";
@@ -48,17 +52,32 @@ const useStyles = makeStyles({
   updateButton: {
     marginTop: 5,
   },
+  avatar: {
+    display: "absolute",
+    margin: "auto",
+    height: 120,
+    width: 120,
+  },
+  field: {
+    display: "absolute",
+  },
+  input: {
+    display: "none",
+  },
 });
 
 const ProfileScreen = ({ history }) => {
   // Variables
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
+  const [uploading, setUploading] = useState();
+  const [image, setImage] = useState("");
   const [values, setValues] = useState({
     showPassword: false,
   });
@@ -70,13 +89,17 @@ const ProfileScreen = ({ history }) => {
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success, loading, error } = userUpdateProfile;
 
+  const userDetails = useSelector((state) => state.userDetails);
+  const { loading: detailsLoading, error: detailsError, user } = userDetails;
+
   // Methods
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     setMessage(null);
+    console.log(image);
     const pass = password;
     const reg = new RegExp("^(?=.*[a-z])(?=.{6,})");
     const testPass = reg.test(pass);
@@ -84,13 +107,34 @@ const ProfileScreen = ({ history }) => {
       setMessage("Password must contain 6 characters");
     } else {
       dispatch(
-        updateUserProfile({
+        await updateUserProfile({
           id: userInfo._id,
-          name,
+          firstName,
+          lastName,
+          image,
           email,
           password,
         })
       );
+    }
+  };
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+    try {
+      const config = {
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      };
+      const { data } = await axios.post("/api/uploads", formData, config);
+      setImage(data);
+      setUploading(false);
+    } catch (err) {
+      console.log(err);
+      setUploading(false);
     }
   };
 
@@ -99,17 +143,23 @@ const ProfileScreen = ({ history }) => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      setName(userInfo.name);
-      setEmail(userInfo.email);
+      if (!user || !user.firstName || success) {
+        dispatch({
+          type: USER_UPDATE_PROFILE_RESET,
+        });
+        dispatch(getUserDetails("profile"));
+      } else {
+        setFirstName(user.firstName);
+        setLastName(user.lastName);
+        setEmail(user.email);
+        setImage(user.image);
+      }
     }
-    dispatch({
-      type: USER_UPDATE_PROFILE_RESET,
-    });
     if (success) {
       setOpen(true);
       setPassword("");
     }
-  }, [dispatch, history, userInfo, success]);
+  }, [dispatch, history, userInfo, success, user]);
 
   return (
     <>
@@ -132,16 +182,60 @@ const ProfileScreen = ({ history }) => {
             Profile
           </Typography>
           <form onSubmit={submitHandler}>
+            <div className={classes.avatar}>
+              <Badge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                badgeContent={
+                  <>
+                    <input
+                      onChange={uploadFileHandler}
+                      accept="image/*"
+                      className={classes.input}
+                      id="icon-button-file"
+                      type="file"
+                    />
+                    <label htmlFor="icon-button-file">
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="span"
+                      >
+                        <PhotoCameraIcon />
+                      </IconButton>
+                    </label>
+                  </>
+                }
+              >
+                <Avatar src={image} className={classes.avatar} />
+              </Badge>
+              {uploading && <Loading></Loading>}
+            </div>
             <TextField
               margin="normal"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
               type="text"
               required
               fullWidth
-              id="outlined-name"
+              id="outlined-first-name"
               variant="outlined"
-              label="Name"
+              label="First Name"
+              color="primary"
+            ></TextField>
+            <TextField
+              margin="normal"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+              type="text"
+              required
+              fullWidth
+              id="outlined-last-name"
+              variant="outlined"
+              label="Last Name"
               color="primary"
             ></TextField>
             <TextField
@@ -195,7 +289,7 @@ const ProfileScreen = ({ history }) => {
                 ),
               }}
             ></TextField>
-            {loading ? (
+            {loading || detailsLoading ? (
               <Loading></Loading>
             ) : (
               <Button

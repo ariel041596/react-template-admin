@@ -70,7 +70,8 @@ const DialogContent = withStyles((theme) => ({
 
 const EditUser = ({ ...props }) => {
   // Variables
-  const [name, setName] = useState(props.user.name);
+  const [firstName, setFirstName] = useState(props.user.firstName);
+  const [lastName, setLastName] = useState(props.user.lastName);
   const [email, setEmail] = useState(props.user.email);
   const [isAdmin, setIsAdmin] = useState(props.user.isAdmin);
   const classes = useStyles();
@@ -87,7 +88,8 @@ const EditUser = ({ ...props }) => {
     await dispatch(
       updateUser({
         _id: props.user._id,
-        name,
+        firstName,
+        lastName,
         email,
         isAdmin: isAdmin,
       })
@@ -110,11 +112,28 @@ const EditUser = ({ ...props }) => {
         <DialogContent dividers>
           <form onSubmit={editUserHandler} autoComplete="off">
             <TextField
-              onChange={(e) => setName(e.target.value)}
-              value={name}
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
               margin="normal"
               id="input-with-icon-name"
-              placeholder="Name"
+              placeholder="First Name"
+              variant="outlined"
+              fullWidth
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountBoxIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+              margin="normal"
+              id="input-with-icon-name"
+              placeholder="Last Name"
               variant="outlined"
               fullWidth
               required
@@ -135,7 +154,7 @@ const EditUser = ({ ...props }) => {
               variant="outlined"
               required
               id="input-with-icon-email"
-              placeholder="Name"
+              placeholder="Last Name"
               fullWidth
               InputProps={{
                 startAdornment: (

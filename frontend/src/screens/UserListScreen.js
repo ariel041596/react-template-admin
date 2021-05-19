@@ -58,6 +58,8 @@ const UserListScreen = ({ history }) => {
   const [openSnack, setOpenSnack] = useState(false);
   const [userData, setUserData] = useState("");
   const [title, setTitle] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
+  const [severity, setSeverity] = useState("inherit");
   const [message, setMessage] = useState(null);
   const [messageContent, setMessageContent] = useState("");
 
@@ -93,10 +95,14 @@ const UserListScreen = ({ history }) => {
     if (successDelete) {
       setOpenSnack(true);
       setMessage("Sucessfully deleted user!");
+      setAlertTitle("Success");
+      setSeverity("success");
     }
     if (userUpdateSuccess) {
       setOpenSnack(true);
       setMessage("Sucessfully changed user data!");
+      setAlertTitle("Success");
+      setSeverity("success");
     }
     // eslint-disable-next-line
   }, [
@@ -120,7 +126,7 @@ const UserListScreen = ({ history }) => {
     setOpenDelete(true);
     setTitle("Delete User");
     setUserData(user._id);
-    setMessageContent(`Are you sure want to delete ${user.name}`);
+    setMessageContent(`Are you sure want to delete ${user.firstName}`);
   };
   const handleClose = () => {
     setOpen(false);
@@ -153,6 +159,8 @@ const UserListScreen = ({ history }) => {
             </div>
             {openSnack && (
               <OpenSnackBar
+                severity={severity}
+                alertTitle={alertTitle}
                 open={openSnack}
                 message={message}
                 handleOpenSnack={() => {
@@ -165,7 +173,8 @@ const UserListScreen = ({ history }) => {
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Last Name</TableCell>
                   <TableCell align="left">Email</TableCell>
                   <TableCell align="left">Role</TableCell>
                   <TableCell align="left">Actions</TableCell>
@@ -178,7 +187,10 @@ const UserListScreen = ({ history }) => {
                   {users.map((user) => (
                     <TableRow key={user._id}>
                       <TableCell component="th" scope="row">
-                        {user.name}
+                        {user.firstName}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {user.lastName}
                       </TableCell>
                       <TableCell align="left">{user.email}</TableCell>
                       <TableCell align="left">

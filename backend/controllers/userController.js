@@ -13,7 +13,9 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      image: user.image,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
@@ -31,7 +33,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     res.json({
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      image: user.image,
       email: user.email,
       isAdmin: user.isAdmin,
     });
@@ -45,7 +49,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route POST /api/users
 // @access Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   const userExist = await User.findOne({
     email,
@@ -56,7 +60,8 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exist");
   }
   const user = await User.create({
-    name,
+    firstName,
+    lastName,
     email,
     password,
   });
@@ -64,7 +69,8 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
@@ -81,7 +87,9 @@ const registerUser = asyncHandler(async (req, res) => {
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    user.name = req.body.name || user.name;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.image = req.body.image || user.image;
     user.email = req.user.email || user.email;
     if (req.body.password) {
       user.password = req.body.password;
@@ -89,7 +97,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
     res.json({
       _id: updatedUser._id,
-      name: updatedUser.name,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      image: updatedUser.image,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id),
@@ -147,7 +157,9 @@ const getUserByID = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
   if (user) {
-    user.name = req.body.name || user.name;
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.image = req.body.image || user.image;
     user.email = req.body.email || user.email;
     user.isAdmin = req.body.isAdmin;
     // To update the password
@@ -157,7 +169,9 @@ const updateUser = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
     res.json({
       _id: updatedUser._id,
-      name: updatedUser.name,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      image: updatedUser.image,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
     });
@@ -171,7 +185,7 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route POST /api/users/add
 // @access Private/Admin
 const addUser = asyncHandler(async (req, res) => {
-  const { name, email, password, isAdmin } = req.body;
+  const { firstName, lastName, email, password, isAdmin } = req.body;
   const userExist = await User.findOne({
     email,
   });
@@ -180,7 +194,8 @@ const addUser = asyncHandler(async (req, res) => {
     throw new Error("User already exist");
   }
   const user = await User.create({
-    name,
+    firstName,
+    lastName,
     email,
     password,
     isAdmin,
@@ -189,7 +204,8 @@ const addUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),

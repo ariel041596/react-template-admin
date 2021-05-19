@@ -1,18 +1,24 @@
 import bcryptjs from "bcryptjs";
 const users = [
   {
-    name: "Admin User",
+    firstName: "Admin User",
+    lastName: "Admin User",
+    image: "../images/",
     email: "admin@admin.com",
     password: bcryptjs.hashSync("password", 10),
     isAdmin: true,
   },
   {
-    name: "Ariel Test",
+    firstName: "Admin User",
+    lastName: "Admin User",
+    image: "../images/",
     email: "ariel@test.com",
     password: bcryptjs.hashSync("password", 10),
   },
   {
-    name: "Test",
+    firstName: "Admin User",
+    lastName: "Admin User",
+    image: "../images/",
     email: "test@test.com",
     password: bcryptjs.hashSync("password", 10),
   },
