@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/register" component={RegisterScreen}></Route>
           <Route path="/profile" component={ProfileScreen}></Route>
           <Route path="/admin/users" component={UserListScreen}></Route>
-          <Route component={NotFound}></Route>
+          <Route exact component={NotFound}></Route>
         </Switch>
       </Layout>
     </Router>

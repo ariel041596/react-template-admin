@@ -90,7 +90,7 @@ const ProfileScreen = ({ history }) => {
   const { success, loading, error } = userUpdateProfile;
 
   const userDetails = useSelector((state) => state.userDetails);
-  const { loading: detailsLoading, error: detailsError, user } = userDetails;
+  const { loading: detailsLoading, user } = userDetails;
 
   // Methods
   const handleClickShowPassword = () => {
@@ -103,7 +103,7 @@ const ProfileScreen = ({ history }) => {
     const pass = password;
     const reg = new RegExp("^(?=.*[a-z])(?=.{6,})");
     const testPass = reg.test(pass);
-    if (!testPass) {
+    if (password && !testPass) {
       setMessage("Password must contain 6 characters");
     } else {
       dispatch(
@@ -265,7 +265,6 @@ const ProfileScreen = ({ history }) => {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               type={values.showPassword ? "text" : "password"}
-              required
               fullWidth
               id="outlined-password"
               variant="outlined"
