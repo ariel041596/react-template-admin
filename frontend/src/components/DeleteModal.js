@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -12,7 +12,6 @@ import CloseIcon from "@material-ui/icons/Close";
 
 import { Typography } from "@material-ui/core";
 
-import { deleteUser } from "../actions/userActions";
 import Loading from "./Loading";
 
 const styles = (theme) => ({
@@ -63,18 +62,13 @@ const DialogContent = withStyles((theme) => ({
 const DeleteModal = ({ ...props }) => {
   // Variables
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   // State
   const userDelete = useSelector((state) => state.userDelete);
   const { loading } = userDelete;
 
-  // Methods
-  const deleteUserHandler = async (e) => {
-    e.preventDefault();
-    await dispatch(deleteUser(props.user));
-    props.handleClose();
-  };
+  const taskDelete = useSelector((state) => state.taskDelete);
+  const { loading: taskLoading } = taskDelete;
 
   return (
     <div>
@@ -91,14 +85,14 @@ const DeleteModal = ({ ...props }) => {
         <DialogContent dividers>
           <Typography>{props.messageContent}</Typography>
           <div className={classes.grow}>
-            {loading ? (
+            {loading || taskLoading ? (
               <Loading></Loading>
             ) : (
               <Button
-                onClick={deleteUserHandler}
+                onClick={props.deleteHandler}
                 variant="contained"
                 autoFocus
-                color="primary"
+                color="secondary"
               >
                 Delete
               </Button>

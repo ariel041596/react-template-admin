@@ -8,6 +8,8 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 // routes
 import userRoutes from "./routes/userRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
+import taskRoutes from "./routes/taskRoutes.js";
 import uploadImageRoutes from "./routes/uploadImageRoutes.js";
 
 dotenv.config();
@@ -22,6 +24,8 @@ app.use(express.json());
 
 app.use("/api/uploads", uploadImageRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/tasks", taskRoutes);
 
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));

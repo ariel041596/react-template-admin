@@ -11,12 +11,6 @@ import {
   Grid,
   Breadcrumbs,
   Avatar,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemSecondaryAction,
-  ListItemText,
 } from "@material-ui/core";
 
 // Icons
@@ -24,14 +18,12 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import GroupIcon from "@material-ui/icons/Group";
 import FlagIcon from "@material-ui/icons/Flag";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import AddAlertIcon from "@material-ui/icons/AddAlert";
-import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 import { Link } from "react-router-dom";
 
 import Meta from "../components/Meta";
 import Calendar from "../components/Calendar";
+import Task from "../components/Task";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,14 +71,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: -30,
   },
 }));
-
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
-}
 
 const HomeScreen = ({ match, history }) => {
   // Variables
@@ -243,59 +227,7 @@ const HomeScreen = ({ match, history }) => {
               <Calendar></Calendar>
             </Grid>
             <Grid item xs={12} sm={12} md={3} lg={3}>
-              <Card>
-                <Grid container spacing={5}>
-                  <Grid item xs={9} sm={9} md={9} lg={9}>
-                    <CardContent>
-                      <Typography
-                        variant="h6"
-                        display="block"
-                        color="textPrimary"
-                        gutterBottom
-                      >
-                        Task to Do
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid item xs={3} sm={3} md={3} lg={3}>
-                    <IconButton aria-label="add to tasks">
-                      <AddAlertIcon color="primary" />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-
-                <CardContent>
-                  <Grid item xs={12} md={12}>
-                    <div className={classes.task}>
-                      <List>
-                        {generate(
-                          <ListItem>
-                            <ListItemAvatar>
-                              <Avatar>
-                                <AssignmentIcon />
-                              </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                              primary="Single-line item"
-                              secondary="Secondary Task"
-                            />
-                            <ListItemSecondaryAction color="primary">
-                              <IconButton edge="end" aria-label="edit">
-                                <AssignmentTurnedInIcon
-                                  className={classes.blue}
-                                />
-                              </IconButton>
-                              <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon color="secondary" />
-                              </IconButton>
-                            </ListItemSecondaryAction>
-                          </ListItem>
-                        )}
-                      </List>
-                    </div>
-                  </Grid>
-                </CardContent>
-              </Card>
+              <Task></Task>
             </Grid>
           </Grid>
         </div>

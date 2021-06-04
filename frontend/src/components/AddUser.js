@@ -168,7 +168,7 @@ const AddUser = ({ ...props }) => {
               onChange={(e) => setLastName(e.target.value)}
               value={lastName}
               margin="normal"
-              id="input-with-icon-name"
+              id="input-with-icon-last-name"
               placeholder="Last Name"
               fullWidth
               required

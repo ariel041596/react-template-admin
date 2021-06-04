@@ -34,7 +34,7 @@ import {
   USER_DELETE_RESET,
   USER_UPDATE_RESET,
 } from "../constants/userConstants";
-import { getUserList } from "../actions/userActions";
+import { getUserList, deleteUser } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -136,6 +136,11 @@ const UserListScreen = ({ history }) => {
   };
   const handleCloseDelete = () => {
     setOpenDelete(false);
+  };
+  const deleteUserHandler = async (e) => {
+    e.preventDefault();
+    await dispatch(deleteUser(userData));
+    handleCloseDelete();
   };
 
   return (
@@ -245,10 +250,11 @@ const UserListScreen = ({ history }) => {
           )}
           {openDelete && (
             <DeleteModal
-              user={userData}
+              data={userData}
               title={title}
               messageContent={messageContent}
               handleClose={handleCloseDelete}
+              deleteHandler={deleteUserHandler}
               open={openDelete}
             ></DeleteModal>
           )}

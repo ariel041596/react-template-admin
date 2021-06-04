@@ -11,6 +11,12 @@ import {
   userUpdateReducer,
   userAddReducer,
 } from "./reducers/userReducers";
+import { eventAddReducer } from "./reducers/eventReducers";
+import {
+  taskAddReducer,
+  myTaskListReducer,
+  taskDeleteReducer,
+} from "./reducers/taskReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -21,6 +27,10 @@ const reducer = combineReducers({
   userDelete: userDeleteReducer,
   userUpdate: userUpdateReducer,
   userAdd: userAddReducer,
+  eventAdd: eventAddReducer,
+  taskAdd: taskAddReducer,
+  taskDelete: taskDeleteReducer,
+  myTaskList: myTaskListReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
