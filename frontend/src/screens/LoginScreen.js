@@ -24,11 +24,11 @@ import { loginUser } from "../actions/userActions";
 const useStyles = makeStyles({
   root: {
     maxWidth: 400,
+    margin: "auto",
     position: "absolute",
     top: 150,
     left: 12,
     right: 12,
-    margin: "auto",
   },
 
   field: {

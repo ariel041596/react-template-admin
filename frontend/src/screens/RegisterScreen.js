@@ -26,10 +26,10 @@ const useStyles = makeStyles({
   root: {
     maxWidth: 400,
     position: "absolute",
-    top: 100,
     left: 12,
     right: 12,
     margin: "auto",
+    // bottom: 30,
   },
 
   field: {
