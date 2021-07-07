@@ -18,3 +18,19 @@ code {
   justify-content: center;
   align-items: center;
 }
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.loginscreen {
+  background-image: url(../src/images/pexels-photo-2098428.jpeg);
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

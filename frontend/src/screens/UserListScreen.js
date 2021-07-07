@@ -13,6 +13,8 @@ import {
   TableBody,
   TableContainer,
   TableCell,
+  Tooltip,
+  Zoom,
 } from "@material-ui/core";
 
 import EditIcon from "@material-ui/icons/Edit";
@@ -216,21 +218,35 @@ const UserListScreen = ({ history }) => {
                         />
                       </TableCell>
                       <TableCell align="left">
-                        <IconButton
-                          size="small"
-                          onClick={() => handleEditUser(user)}
-                          aria-label="edit"
+                        <Tooltip
+                          arrow
+                          TransitionComponent={Zoom}
+                          title="Edit"
+                          placement="top-start"
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleDeleteUser(user)}
-                          color="secondary"
-                          aria-label="delete"
+                          <IconButton
+                            size="small"
+                            onClick={() => handleEditUser(user)}
+                            aria-label="edit"
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip
+                          arrow
+                          TransitionComponent={Zoom}
+                          title="Delete"
+                          placement="top-start"
                         >
-                          <DeleteIcon />
-                        </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDeleteUser(user)}
+                            color="secondary"
+                            aria-label="delete"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   ))}

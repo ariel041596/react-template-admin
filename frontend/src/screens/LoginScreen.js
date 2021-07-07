@@ -93,9 +93,7 @@ const LoginScreen = ({ location, history }) => {
       <Meta title="React Template | Login"></Meta>
       <form onSubmit={loginHandler} className={classes.root}>
         <div className={classes.field}>
-          <Avatar className={classes.avatar}>
-            <MailIcon></MailIcon>
-          </Avatar>
+          <Avatar className={classes.avatar} alt="" src="/logo.png"></Avatar>
           <Typography className={classes.title} variant="h4">
             Login
           </Typography>

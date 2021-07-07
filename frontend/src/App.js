@@ -15,18 +15,20 @@ import NotFound from "./screens/NotFound";
 
 const App = () => {
   return (
-    <Router>
-      <Layout>
-        <Switch>
-          <Route path="/" component={HomeScreen} exact></Route>
-          <Route path="/login" component={LoginScreen}></Route>
-          <Route path="/register" component={RegisterScreen}></Route>
-          <Route path="/profile" component={ProfileScreen}></Route>
-          <Route path="/admin/users" component={UserListScreen}></Route>
-          <Route exact component={NotFound}></Route>
-        </Switch>
-      </Layout>
-    </Router>
+    <>
+      <Router>
+        <Layout>
+          <Switch>
+            <Route path="/" component={HomeScreen} exact></Route>
+            <Route path="/login" component={LoginScreen}></Route>
+            <Route path="/register" component={RegisterScreen}></Route>
+            <Route path="/profile" component={ProfileScreen}></Route>
+            <Route path="/admin/users" component={UserListScreen}></Route>
+            <Route exact component={NotFound}></Route>
+          </Switch>
+        </Layout>
+      </Router>
+    </>
   );
 };
 

@@ -13,6 +13,8 @@ import {
   Snackbar,
   Avatar,
   Badge,
+  Tooltip,
+  Zoom,
 } from "@material-ui/core";
 
 import MuiAlert from "@material-ui/lab/Alert";
@@ -291,16 +293,23 @@ const ProfileScreen = ({ history }) => {
             {loading || detailsLoading ? (
               <Loading></Loading>
             ) : (
-              <Button
-                disabled={loading}
-                type="submit"
-                size="large"
-                variant="contained"
-                color="primary"
-                className={classes.updateButton}
+              <Tooltip
+                arrow
+                TransitionComponent={Zoom}
+                title="Click to submit"
+                placement="bottom"
               >
-                Update Profile
-              </Button>
+                <Button
+                  disabled={loading}
+                  type="submit"
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  className={classes.updateButton}
+                >
+                  Update Profile
+                </Button>
+              </Tooltip>
             )}
           </form>
         </CardContent>

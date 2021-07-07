@@ -118,118 +118,105 @@ const RegisterScreen = ({ location, history }) => {
       <Meta title="React Template | Register"></Meta>
       <form onSubmit={registerHandler} className={classes.root}>
         <div className={classes.field}>
-          <Avatar className={classes.avatar}>
-            <MailIcon></MailIcon>
-          </Avatar>
+          <Avatar className={classes.avatar} alt="" src="/logo.png"></Avatar>
           <Typography className={classes.title} variant="h4">
             Register
           </Typography>
         </div>
-        <div>
-          <TextField
-            margin="normal"
-            onChange={(e) => setFirstName(e.target.value)}
-            value={firstName}
-            type="text"
-            required
-            fullWidth
-            id="outlined-first-name"
-            variant="outlined"
-            label="First Name"
-            color="primary"
-          ></TextField>
-          <TextField
-            margin="normal"
-            onChange={(e) => setLastName(e.target.value)}
-            value={lastName}
-            type="text"
-            required
-            fullWidth
-            id="outlined-last-name"
-            variant="outlined"
-            label="Last Name"
-            color="primary"
-          ></TextField>
-        </div>
-        <div>
-          <TextField
-            margin="normal"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            type="email"
-            required
-            fullWidth
-            id="outlined-email"
-            variant="outlined"
-            label="Email"
-            color="primary"
-            InputProps={{
-              startadornment: (
-                <InputAdornment position="end">
-                  <IconButton aria-label="toggle email visibility" edge="end">
-                    <MailIcon></MailIcon>
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          ></TextField>
-        </div>
-        <div>
-          <TextField
-            margin="normal"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            type={values.showPassword ? "text" : "password"}
-            required
-            fullWidth
-            id="outlined-password"
-            variant="outlined"
-            color="primary"
-            label="Password"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          ></TextField>
-        </div>
-        <div>
-          <TextField
-            onChange={(e) => handleCheckPassword(e)}
-            margin="normal"
-            value={confirmPassword}
-            type={values.showPassword ? "text" : "password"}
-            required
-            fullWidth
-            id="outlined-confirm-password"
-            variant="outlined"
-            color="primary"
-            label="Confirm Password"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          ></TextField>
-        </div>
+        <TextField
+          onChange={(e) => setFirstName(e.target.value)}
+          value={firstName}
+          type="text"
+          required
+          fullWidth
+          id="outlined-first-name"
+          variant="outlined"
+          label="First Name"
+          color="primary"
+        ></TextField>
+        <TextField
+          style={{ margin: "10px 0" }}
+          onChange={(e) => setLastName(e.target.value)}
+          value={lastName}
+          type="text"
+          required
+          fullWidth
+          id="outlined-last-name"
+          variant="outlined"
+          label="Last Name"
+          color="primary"
+        ></TextField>
+        <TextField
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          type="email"
+          required
+          fullWidth
+          id="outlined-email"
+          variant="outlined"
+          label="Email"
+          color="primary"
+          InputProps={{
+            startadornment: (
+              <InputAdornment position="end">
+                <IconButton aria-label="toggle email visibility" edge="end">
+                  <MailIcon></MailIcon>
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        ></TextField>
+        <TextField
+          style={{ margin: "10px 0" }}
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          type={values.showPassword ? "text" : "password"}
+          required
+          fullWidth
+          id="outlined-password"
+          variant="outlined"
+          color="primary"
+          label="Password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        ></TextField>
+        <TextField
+          onChange={(e) => handleCheckPassword(e)}
+          value={confirmPassword}
+          type={values.showPassword ? "text" : "password"}
+          required
+          fullWidth
+          id="outlined-confirm-password"
+          variant="outlined"
+          color="primary"
+          label="Confirm Password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        ></TextField>
         <div>
           <Button
             disabled={loading}
@@ -240,7 +227,7 @@ const RegisterScreen = ({ location, history }) => {
             color="primary"
             className={classes.login}
           >
-            Sign In
+            Register
           </Button>
           <p>
             Already have an account?{" "}

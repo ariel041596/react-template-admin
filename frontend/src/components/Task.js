@@ -15,6 +15,8 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
+  Tooltip,
+  Zoom,
 } from "@material-ui/core";
 
 //   Icons
@@ -107,12 +109,10 @@ const Task = ({ history }) => {
     });
     if (userInfo && userInfo.isAdmin) {
       dispatch(getMyTasks());
-    } else {
-      history.push("/login");
     }
     if (taskAddSuccess) {
       setOpenSnack(true);
-      setMessage("Sucessfully added task!");
+      setMessage("Successfully added task!");
       setAlertTitle("Success");
       setSeverity("success");
     }
@@ -177,14 +177,21 @@ const Task = ({ history }) => {
               {loading ? (
                 <Loading></Loading>
               ) : (
-                <IconButton
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                  aria-label="add to tasks"
+                <Tooltip
+                  arrow
+                  TransitionComponent={Zoom}
+                  title="Add Task"
+                  placement="top"
                 >
-                  <AddAlertIcon color="primary" />
-                </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      setOpen(true);
+                    }}
+                    aria-label="add to tasks"
+                  >
+                    <AddAlertIcon color="primary" />
+                  </IconButton>
+                </Tooltip>
               )}
             </div>
           </Grid>
@@ -209,16 +216,30 @@ const Task = ({ history }) => {
                       secondary={myTask.start}
                     />
                     <ListItemSecondaryAction color="primary">
-                      <IconButton edge="end" aria-label="edit">
-                        <AssignmentTurnedInIcon className={classes.blue} />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleDelete(myTask._id)}
-                        edge="end"
-                        aria-label="delete"
+                      <Tooltip
+                        arrow
+                        TransitionComponent={Zoom}
+                        title="Edit Task"
+                        placement="top"
                       >
-                        <DeleteIcon color="secondary" />
-                      </IconButton>
+                        <IconButton edge="end" aria-label="edit">
+                          <AssignmentTurnedInIcon className={classes.blue} />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip
+                        arrow
+                        TransitionComponent={Zoom}
+                        title="Delete Task"
+                        placement="top"
+                      >
+                        <IconButton
+                          onClick={() => handleDelete(myTask._id)}
+                          edge="end"
+                          aria-label="delete"
+                        >
+                          <DeleteIcon color="secondary" />
+                        </IconButton>
+                      </Tooltip>
                     </ListItemSecondaryAction>
                   </ListItem>
                 ))}
